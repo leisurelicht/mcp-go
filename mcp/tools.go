@@ -155,8 +155,8 @@ func (r CallToolRequest) RequireInt64(key string) (int64, error) {
 	args := r.GetArguments()
 	if val, ok := args[key]; ok {
 		switch v := val.(type) {
-		case int:
-			return int64(v), nil
+		case int64:
+			return v, nil
 		case float64:
 			return int64(v), nil
 		case string:

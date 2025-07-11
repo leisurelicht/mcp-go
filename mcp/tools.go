@@ -151,6 +151,26 @@ func (r CallToolRequest) RequireInt(key string) (int, error) {
 	return 0, fmt.Errorf("required argument %q not found", key)
 }
 
+func (r CallToolRequest) RequireInt64(key string) (int64, error) {
+	args := r.GetArguments()
+	if val, ok := args[key]; ok {
+		switch v := val.(type) {
+		case int:
+			return int64(v), nil
+		case float64:
+			return int64(v), nil
+		case string:
+			if i, err := strconv.ParseInt(v, 10, 64); err == nil {
+				return i, nil
+			}
+			return 0, fmt.Errorf("argument %q cannot be converted to int64", key)
+		default:
+			return 0, fmt.Errorf("argument %q is not an int64", key)
+		}
+	}
+	return 0, fmt.Errorf("required argument %q not found", key)
+}
+
 // GetFloat returns a float64 argument by key, or the default value if not found
 func (r CallToolRequest) GetFloat(key string, defaultValue float64) float64 {
 	args := r.GetArguments()
